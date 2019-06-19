@@ -1,0 +1,4 @@
+.envrc
+cache.sqlite
+.build-harness
+Makefile.build-harness
