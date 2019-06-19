@@ -6,6 +6,7 @@ import singer
 import requests
 import requests_cache
 
+username = os.environ["TRELLO_USERNAME"]
 auth = {
     "key": os.environ["TRELLO_API_KEY"],
     "token": os.environ["TRELLO_API_TOKEN"]
@@ -61,7 +62,7 @@ requests_cache.install_cache(expire_after=3600)
 try:
     orgs = requests.request(
         "GET",
-        "https://api.trello.com/1/members/eosterman/organizations",
+        "https://api.trello.com/1/members/" + username + "/organizations",
         params=auth)
     for org in json.loads(orgs.text):
         singer.write_records('trello_organizations',
