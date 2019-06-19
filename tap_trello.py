@@ -22,13 +22,13 @@ trello_organizations_schema = {
             'type': 'string'
         },
         'displayName': {
-            'type': 'string'
+            'type': ['null', 'string']
         },
         'url': {
             'type': 'string'
         },
         'logoUrl': {
-            'type': 'string'
+            'type': ['null', 'string']
         },
     },
 }
@@ -50,7 +50,7 @@ trello_card_custom_fields_schema = {
             'type': 'string'
         },
         'value': {
-            'type': 'string'
+            'type': ['null', 'string']
         },
     },
 }
@@ -60,10 +60,10 @@ singer.write_schema('trello_card_custom_fields',
 requests_cache.install_cache(expire_after=3600)
 
 try:
-    orgs = requests.request(
-        "GET",
-        "https://api.trello.com/1/members/" + username + "/organizations",
-        params=auth)
+    orgs = requests.request("GET",
+                            "https://api.trello.com/1/members/" + username +
+                            "/organizations",
+                            params=auth)
     for org in json.loads(orgs.text):
         singer.write_records('trello_organizations',
                              [{
