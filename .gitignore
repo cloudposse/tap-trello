@@ -1,4 +1,7 @@
+.idea
+*.iml
 .envrc
 cache.sqlite
 .build-harness
+build-harness/
 Makefile.build-harness

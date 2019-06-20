@@ -4,12 +4,12 @@ This tap is designed as a *hack* to get around the limitations of the [StitchDat
 
 Unfortunately, the Trello API requires us to iterate over the entire relational model of Organizations, Boards, Cards, Custom Field Items, Custom Fields, etc to retrieve the missing data.
 
-
 ## Usage
 
 1. Obtain your [Trello API Keys](https://trello.com/app-key).
 2. Export these environment variables:
    - `TRELLO_API_KEY`
    - `TRELLO_API_TOKEN`
+   - `TRELLO_USERNAME`
 3. Install requirements: `pip install -r requirements.txt` 
 4. Run `tap_trello.py`
