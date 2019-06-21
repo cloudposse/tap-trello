@@ -38,16 +38,12 @@ singer.write_schema('trello_organizations', trello_organizations_schema, 'id')
 # The target will just add this column, leaving everything else intact
 trello_cards_schema = {
     'properties': {
-#        'id': {
-#            # Stitcher uses text
-#            'type': 'text'
-#        },
         'idOrganization': {
             'type': ['null', 'string']
         },
     },
 }
-singer.write_schema('trello_cards', trello_cards_schema, 'id')
+singer.write_schema('trello_cards', trello_cards_schema, [])
 
 # We've tried to follow the convention of the "official" trello tap by StitchData which uses camel case names and id format
 trello_card_custom_fields_schema = {
