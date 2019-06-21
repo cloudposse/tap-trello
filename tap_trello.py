@@ -39,7 +39,8 @@ singer.write_schema('trello_organizations', trello_organizations_schema, 'id')
 trello_cards_schema = {
     'properties': {
         'id': {
-            'type': 'string'
+            # Stitcher uses text
+            'type': 'text'
         },
         'idOrganization': {
             'type': ['null', 'string']
