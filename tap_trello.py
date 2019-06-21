@@ -46,6 +46,9 @@ trello_card_custom_fields_schema = {
         'idBoard': {
             'type': 'string'
         },
+        'idOrganization': {
+            'type': 'string'
+        },
         'name': {
             'type': 'string'
         },
@@ -67,6 +70,9 @@ trello_card_attachments_schema = {
             'type': 'string'
         },
         'idBoard': {
+            'type': 'string'
+        },
+        'idOrganization': {
             'type': 'string'
         },
         'idMember': {
@@ -138,6 +144,7 @@ try:
                             'id': attachment["id"],
                             'idCard': card["id"],
                             'idBoard': board["id"],
+                            'idOrganization': org["id"],
                             'idMember': attachment["idMember"],
                             'name': attachment["name"],
                             'url': attachment["url"],
@@ -169,6 +176,7 @@ try:
                                     'id': custom_field_item["id"],
                                     'idCard': card["id"],
                                     'idBoard': board["id"],
+                                    'idOrganization': org["id"],
                                     'name': field["name"],
                                     'value': custom_field_item["value"]["text"]
                                 }])
@@ -179,6 +187,7 @@ try:
                                     'id': custom_field_item["idCustomField"],
                                     'idCard': card["id"],
                                     'idBoard': board["id"],
+                                    'idOrganization': org["id"],
                                     'name': field["name"],
                                     'value':
                                     custom_field_item["value"]["number"]
@@ -193,6 +202,7 @@ try:
                                         custom_field_item["idCustomField"],
                                         'idCard': card["id"],
                                         'idBoard': board["id"],
+                                        'idOrganization': org["id"],
                                         'name': field["name"],
                                         'value': option["value"]["text"]
                                     }])
