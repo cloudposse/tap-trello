@@ -76,7 +76,7 @@ trello_card_attachments_schema = {
             'type': 'string'
         },
         'bytes': {
-            'type': 'integer'
+            'type': ['null', 'integer']
         },
         'url': {
             'type': ['null', 'string']
