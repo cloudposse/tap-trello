@@ -34,6 +34,20 @@ trello_organizations_schema = {
 }
 singer.write_schema('trello_organizations', trello_organizations_schema, 'id')
 
+# For cards, we're adding organization to make it easier to filter in Metabase.
+# The target will just add this column, leaving everything else intact
+trello_cards_schema = {
+    'properties': {
+        'id': {
+            'type': 'string'
+        },
+        'idOrganization': {
+            'type': ['null', 'string']
+        },
+    },
+}
+singer.write_schema('trello_cards', trello_cards_schema, 'id')
+
 # We've tried to follow the convention of the "official" trello tap by StitchData which uses camel case names and id format
 trello_card_custom_fields_schema = {
     'properties': {
@@ -131,6 +145,13 @@ try:
                                      board["id"] + "/cards",
                                      params=auth)
             for card in json.loads(cards.text):
+                # Update cards to include an organization
+                singer.write_records('trello_cards',
+                                     [{
+                                         'id': attachment["id"],
+                                         'idOrganization': org["id"],
+                                     }])
+
                 # Fetch attachments
                 attachments = requests.request(
                     "GET",
