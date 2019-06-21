@@ -57,6 +57,47 @@ trello_card_custom_fields_schema = {
 singer.write_schema('trello_card_custom_fields',
                     trello_card_custom_fields_schema, 'id')
 
+# We've tried to follow the convention of the "official" trello tap by StitchData which uses camel case names and id format
+trello_card_attachments_schema = {
+    'properties': {
+        'id': {
+            'type': 'string'
+        },
+        'idCard': {
+            'type': 'string'
+        },
+        'idBoard': {
+            'type': 'string'
+        },
+        'idMember': {
+            'type': ['null', 'string']
+        },
+        'name': {
+            'type': 'string'
+        },
+        'size': {
+            'type': 'integer'
+        },
+        'url': {
+            'type': ['null', 'string']
+        },
+        'pos': {
+            'type': 'integer'
+        },
+        'mimeType': {
+            'type': ['null', 'string']
+        },
+        'isUpload': {
+            'type': ['null', 'boolean']
+        },
+        'date': {"type": ["null", "string"], "format": "date-time"},
+
+    },
+}
+singer.write_schema('trello_card_custom_fields',
+                    trello_card_custom_fields_schema, 'id')
+
+
 requests_cache.install_cache(expire_after=3600)
 
 try:
@@ -83,6 +124,29 @@ try:
                                      board["id"] + "/cards",
                                      params=auth)
             for card in json.loads(cards.text):
+                # Fetch attachments
+                attachments = requests.request(
+                    "GET",
+                    "https://api.trello.com/1/cards/" + card["id"] +
+                    "/attachments",
+                    params=auth)
+                for attachment in json.loads(attachments.text):
+                  singer.write_records(
+                      'trello_card_attachments',
+                      [{
+                          'id': attachment["id"],
+                          'idCard': card["id"],
+                          'idBoard': board["id"],
+                          'idMember': attachment["idMember"],
+                          'name': attachment["name"],
+                          'url': attachment["url"],
+                          'mimeType': attachment["mimeType"],
+                          'isUpload': attachment["isUpload"],
+                          'date': attachment["date"],
+                          'pos': attachment["pos"],
+                      }])
+
+                # Fetch Custom Fields
                 custom_field_items = requests.request(
                     "GET",
                     "https://api.trello.com/1/cards/" + card["id"] +
@@ -100,7 +164,7 @@ try:
                             singer.write_records(
                                 'trello_card_custom_fields',
                                 [{
-                                    'id': custom_field_item["idCustomField"],
+                                    'id': custom_field_item["id"],
                                     'idCard': card["id"],
                                     'idBoard': board["id"],
                                     'name': field["name"],
