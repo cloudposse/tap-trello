@@ -75,8 +75,8 @@ trello_card_attachments_schema = {
         'name': {
             'type': 'string'
         },
-        'size': {
-            'type': 'integer'
+        'bytes': {
+            'type': ['null', 'integer']
         },
         'url': {
             'type': ['null', 'string']
@@ -145,6 +145,7 @@ try:
                             'isUpload': attachment["isUpload"],
                             'date': attachment["date"],
                             'pos': attachment["pos"],
+                            'bytes': attachment["bytes"],
                         }])
 
                 # Fetch Custom Fields
