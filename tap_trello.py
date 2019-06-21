@@ -90,13 +90,14 @@ trello_card_attachments_schema = {
         'isUpload': {
             'type': ['null', 'boolean']
         },
-        'date': {"type": ["null", "string"], "format": "date-time"},
-
+        'date': {
+            "type": ["null", "string"],
+            "format": "date-time"
+        },
     },
 }
-singer.write_schema('trello_card_custom_fields',
-                    trello_card_custom_fields_schema, 'id')
-
+singer.write_schema('trello_card_attachments', trello_card_attachments_schema,
+                    'id')
 
 requests_cache.install_cache(expire_after=3600)
 
@@ -131,20 +132,20 @@ try:
                     "/attachments",
                     params=auth)
                 for attachment in json.loads(attachments.text):
-                  singer.write_records(
-                      'trello_card_attachments',
-                      [{
-                          'id': attachment["id"],
-                          'idCard': card["id"],
-                          'idBoard': board["id"],
-                          'idMember': attachment["idMember"],
-                          'name': attachment["name"],
-                          'url': attachment["url"],
-                          'mimeType': attachment["mimeType"],
-                          'isUpload': attachment["isUpload"],
-                          'date': attachment["date"],
-                          'pos': attachment["pos"],
-                      }])
+                    singer.write_records(
+                        'trello_card_attachments',
+                        [{
+                            'id': attachment["id"],
+                            'idCard': card["id"],
+                            'idBoard': board["id"],
+                            'idMember': attachment["idMember"],
+                            'name': attachment["name"],
+                            'url': attachment["url"],
+                            'mimeType': attachment["mimeType"],
+                            'isUpload': attachment["isUpload"],
+                            'date': attachment["date"],
+                            'pos': attachment["pos"],
+                        }])
 
                 # Fetch Custom Fields
                 custom_field_items = requests.request(
