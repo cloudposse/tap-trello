@@ -38,10 +38,10 @@ singer.write_schema('trello_organizations', trello_organizations_schema, 'id')
 # The target will just add this column, leaving everything else intact
 trello_cards_schema = {
     'properties': {
-        'id': {
-            # Stitcher uses text
-            'type': 'text'
-        },
+#        'id': {
+#            # Stitcher uses text
+#            'type': 'text'
+#        },
         'idOrganization': {
             'type': ['null', 'string']
         },
