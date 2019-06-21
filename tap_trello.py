@@ -148,7 +148,7 @@ try:
                 # Update cards to include an organization
                 singer.write_records('trello_cards',
                                      [{
-                                         'id': attachment["id"],
+                                         'id': card["id"],
                                          'idOrganization': org["id"],
                                      }])
 
