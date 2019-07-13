@@ -34,6 +34,38 @@ trello_organizations_schema = {
 }
 singer.write_schema('trello_organizations', trello_organizations_schema, 'id')
 
+# Table to make it easier to filter in Metabase.
+trello_board_organizations_schema = {
+    'properties': {
+        'id': {
+            'type': 'string'
+        },
+        'name': {
+            'type': 'string'
+        },
+        'displayName': {
+            'type': ['null', 'string']
+        },
+        'desc': {
+            'type': ['null', 'string']
+        },
+        'closed': {
+            'type': ['null', 'boolean']
+        },
+        'organizationName': {
+            'type': 'string'
+        },
+        'organizationDisplayName': {
+            'type': ['null', 'string']
+        },
+        'organizationDesc': {
+            'type': 'string'
+        },
+    },
+}
+singer.write_schema('trello_board_organizations',
+                    trello_board_organizations_schema, 'id')
+
 # We've tried to follow the convention of the "official" trello tap by StitchData which uses camel case names and id format
 trello_card_custom_fields_schema = {
     'properties': {
@@ -126,6 +158,18 @@ try:
                                   org["id"] + "/boards",
                                   params=auth)
         for board in json.loads(boards.text):
+            singer.write_records(
+                'trello_board_organizations',
+                [{
+                    'id': board["id"],
+                    'name': board["name"],
+                    'displayName': org["displayName"] + " / " + board["name"],
+                    'closed': board["closed"],
+                    'desc': board["desc"],
+                    'organizationName': org["name"],
+                    'organizationDisplayName': org["displayName"],
+                    'organizationDesc': org["desc"]
+                }])
             cards = requests.request("GET",
                                      "https://api.trello.com/1/boards/" +
                                      board["id"] + "/cards",
@@ -137,6 +181,7 @@ try:
                     "https://api.trello.com/1/cards/" + card["id"] +
                     "/attachments",
                     params=auth)
+
                 for attachment in json.loads(attachments.text):
                     singer.write_records(
                         'trello_card_attachments',
